@@ -1,0 +1,63 @@
+- name: Create an Azure Resource group
+  hosts: localhost
+  connection: local
+  vars:
+    - resource_group_datalake: ansibletest-3aa38776-d31e-49f3-b486-ab17d49e228e
+    - resource_group: ansibletest-6ecce33f-c1d3-4bfd-a675-4eb5e81c40ea
+
+  tasks:
+    - name: Get resource group datalake info
+      azure_rm_resourcegroup_info:
+        name: "{{ resource_group_datalake }}"
+        list_resources: true
+      register: rg
+    
+    - name: Assert the resource group facts
+      ansible.builtin.assert:
+        that:
+          - rg.resourcegroups | length == 1
+          - rg.resourcegroups[0].resources | length >= 0
+    
+    - name: Get resource group info
+      azure_rm_resourcegroup_info:
+      register: rg
+    
+    - name: Assert all resource group facts
+      ansible.builtin.assert:
+        that:
+          - rg.resourcegroups | length >= 1
+    
+    - name: Get resource group info
+      azure_rm_resourcegroup_info:
+        name: "{{ resource_group }}"
+        list_resources: true
+      register: rg
+    
+    - name: Assert the resource group facts
+      ansible.builtin.assert:
+        that:
+          - rg.resourcegroups | length == 1
+          - rg.resourcegroups[0].resources | length >= 0
+    
+    - name: Create resource group (idempontent)
+      azure_rm_resourcegroup:
+        name: "{{ resource_group }}"
+        location: "{{ rg.resourcegroups[0].location }}"
+      register: output
+    
+    - name: Assert idempotent
+      ansible.builtin.assert:
+        that:
+          - not output.changed
+    
+    - name: Delete resource group
+      azure_rm_resourcegroup:
+        name: "{{ resource_group }}"
+        state: absent
+      check_mode: true
+      register: output
+    
+    - name: Assert the resource group deleted
+      ansible.builtin.assert:
+        that:
+          - output.changed
