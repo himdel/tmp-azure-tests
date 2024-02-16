@@ -1,0 +1,15 @@
+- name: Create an Azure Resource group
+  hosts: localhost
+  connection: local
+  vars:
+    - resource_group_datalake: ansibletest-3aa38776-d31e-49f3-b486-ab17d49e228e
+    - resource_group: ansibletest-6ecce33f-c1d3-4bfd-a675-4eb5e81c40ea
+
+  tasks:
+    - name: Get facts for all resource groups
+      azure_rm_resourcegroup_info:
+
+    - name: Get facts for one resource group including resources it contains
+      azure_rm_resourcegroup_info:
+        name: bpeck
+        list_resources: true
