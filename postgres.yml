@@ -9,7 +9,6 @@
          azure_postgresql_name: "postgresql-bc63de61bf03"
          azure_postgresql_backup_retention_days: 10
          azure_postgresql_admin_username: ansible
-         azure_postgresql_admin_password: ansible-testing-123
          azure_postgresql_storage_mb: 5120
          azure_postgresql_sku:
             name: B_Gen5_1
@@ -35,7 +34,6 @@
          azure_postgresql_name: "postgresql-bc63de61bf03"
          azure_postgresql_backup_retention_days: 10
          azure_postgresql_admin_username: ansible
-         azure_postgresql_admin_password: ansible-testing-123
          azure_postgresql_storage_mb: 5120
          azure_postgresql_sku:
             name: B_Gen5_1
