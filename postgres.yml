@@ -1,50 +1,54 @@
 - hosts: localhost
   tasks:
-     - include_role:
-         name: cloud.azure_ops.azure_manage_postgresql
-       vars:
-         operation: "create"
-         azure_region: "eastus"
-         azure_resource_group: "postgresql-rg-bc63de61bf03"
-         azure_postgresql_name: "postgresql-bc63de61bf03"
-         azure_postgresql_backup_retention_days: 10
-         azure_postgresql_admin_username: ansible
-         azure_postgresql_storage_mb: 5120
-         azure_postgresql_sku:
-            name: B_Gen5_1
-            tier: Basic
-         azure_resource_group_tags:
-            tag0: "tag0"
-            tag1: "tag1"
-         azure_postgresql_settings:
-            - name: deadlock_timeout
-              value: 2000
-         azure_postgresql_firewall_rule:
-            - name: rule_0
-              start_ip_address: 172.10.1.0
-              end_ip_address: 172.10.128.0
-     - name: Get facts for all resource groups
-       azure_rm_resourcegroup_info:
-     - include_role:
-         name: cloud.azure_ops.azure_manage_postgresql
-       vars:
-         operation: "destroy"
-         azure_region: "eastus"
-         azure_resource_group: "postgresql-rg-bc63de61bf03"
-         azure_postgresql_name: "postgresql-bc63de61bf03"
-         azure_postgresql_backup_retention_days: 10
-         azure_postgresql_admin_username: ansible
-         azure_postgresql_storage_mb: 5120
-         azure_postgresql_sku:
-            name: B_Gen5_1
-            tier: Basic
-         azure_resource_group_tags:
-            tag0: "tag0"
-            tag1: "tag1"
-         azure_postgresql_settings:
-            - name: deadlock_timeout
-              value: 2000
-         azure_postgresql_firewall_rule:
-            - name: rule_0
-              start_ip_address: 172.10.1.0
-              end_ip_address: 172.10.128.0
+     - block:
+       - include_role:
+           name: cloud.azure_ops.azure_manage_postgresql
+         vars:
+           operation: "create"
+           azure_region: "eastus"
+           azure_resource_group: "postgresql-rg-bc63de61bf03"
+           azure_postgresql_name: "postgresql-bc63de61bf03"
+           azure_postgresql_backup_retention_days: 10
+           azure_postgresql_admin_username: ansible
+           azure_postgresql_storage_mb: 5120
+           azure_postgresql_sku:
+              name: B_Gen5_1
+              tier: Basic
+           azure_resource_group_tags:
+              tag0: "tag0"
+              tag1: "tag1"
+           azure_postgresql_settings:
+              - name: deadlock_timeout
+                value: 2000
+           azure_postgresql_firewall_rule:
+              - name: rule_0
+                start_ip_address: 172.10.1.0
+                end_ip_address: 172.10.128.0
+       rescue:
+         - name: Get facts for all resource groups
+           azure_rm_resourcegroup_info:
+             name: "postgresql-rg-bc63de61bf03"
+       always:
+         - include_role:
+             name: cloud.azure_ops.azure_manage_postgresql
+           vars:
+             operation: "destroy"
+             azure_region: "eastus"
+             azure_resource_group: "postgresql-rg-bc63de61bf03"
+             azure_postgresql_name: "postgresql-bc63de61bf03"
+             azure_postgresql_backup_retention_days: 10
+             azure_postgresql_admin_username: ansible
+             azure_postgresql_storage_mb: 5120
+             azure_postgresql_sku:
+                name: B_Gen5_1
+                tier: Basic
+             azure_resource_group_tags:
+                tag0: "tag0"
+                tag1: "tag1"
+             azure_postgresql_settings:
+                - name: deadlock_timeout
+                  value: 2000
+             azure_postgresql_firewall_rule:
+                - name: rule_0
+                  start_ip_address: 172.10.1.0
+                  end_ip_address: 172.10.128.0
