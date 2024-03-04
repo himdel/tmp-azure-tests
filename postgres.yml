@@ -6,6 +6,7 @@
          operation: "create"
          azure_region: "eastus"
          azure_resource_group: "postgresql-rg"
+         azure_postgresql_name: "postgresql-server"
          azure_postgresql_backup_retention_days: 10
          azure_postgresql_admin_username: ansible
          azure_postgresql_admin_password: ansible-testing-123
@@ -31,6 +32,7 @@
          operation: "destroy"
          azure_region: "eastus"
          azure_resource_group: "postgresql-rg"
+         azure_postgresql_name: "postgresql-server"
          azure_postgresql_backup_retention_days: 10
          azure_postgresql_admin_username: ansible
          azure_postgresql_admin_password: ansible-testing-123
