@@ -32,7 +32,7 @@
          - name: Get facts for all resource groups
            azure.azcollection.azure_rm_resourcegroup_info:
              name: "{{ azure_resource_group }}"
-             register: rg_info
+           register: rg_info
          - name: Debug Resource Group
            ansible.builtin.debug:
              var: rg_info

@@ -28,7 +28,7 @@
          - name: Get facts for all resource groups
            azure_rm_resourcegroup_info:
              name: "postgresql-rg-bc63de61bf03"
-             register: rg_info
+           register: rg_info
          - name: Debug Resource Group
            debug:
              var: rg_info
