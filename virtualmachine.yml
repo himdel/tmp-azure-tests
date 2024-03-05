@@ -4,7 +4,6 @@
        operation: "create"
        azure_region: "eastus"
        azure_resource_group: "bpeck-tests"
-       azure_lock_resource_group: yes
 
 - hosts: localhost
   vars:
