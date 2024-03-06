@@ -1,7 +1,4 @@
 - hosts: localhost
-  vars:
-    random_number: "{{ 9999 | random() }}"
-    azure_resource_group: "vm-tests-{{ random_number }}"
   tasks:
      - block:
        - name: Create networking stack
@@ -10,8 +7,8 @@
          vars:
            operation: "create"
            azure_region: "eastus"
-           azure_virtual_network: "vnet-{{ random_number }}"
-           azure_subnet: "subnet-{{ random_number }}"
+           azure_virtual_network: "vnet-{{ my_id }}"
+           azure_subnet: "subnet-{{ my_id }}"
            azure_vnet_address_prefixes_cidr:
             - "10.10.0.0/16"
            azure_subnet_address_prefixes_cidr:
@@ -22,7 +19,7 @@
          vars:
            operation: 'create'
            azure_vm:
-             name: "{{ azure_resource_group }}-example-vm"
+             name: "{{ azure_resource_group }}-vm-{{ my_id }}"
              admin_username: 'azureuser'
              admin_password: "{{ azure_admin_password }}"
              image:
@@ -50,15 +47,15 @@
              operation: "delete"
              remove_on_absent: 'all_autocreated'
              azure_vm:
-               name: "{{ azure_resource_group }}-example-vm"
+               name: "{{ azure_resource_group }}-vm-{{ my_id }}"
          - name: Delete networking stack
            ansible.builtin.include_role:
              name: cloud.azure_ops.azure_manage_networking_stack
            vars:
              operation: "delete"
              azure_region: "eastus"
-             azure_virtual_network: "vnet-{{ random_number }}"
-             azure_subnet: "subnet-{{ random_number }}"
+             azure_virtual_network: "vnet-{{ my_id }}"
+             azure_subnet: "subnet-{{ my_id }}"
              azure_vnet_address_prefixes_cidr:
               - "10.10.0.0/16"
              azure_subnet_address_prefixes_cidr:
