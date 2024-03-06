@@ -1,15 +1,21 @@
 - hosts: localhost
-  roles:
-     - role: cloud.azure_ops.azure_manage_resource_group
-       operation: "create"
-       azure_region: "eastus"
-       azure_resource_group: "bpeck-tests"
-
-- hosts: localhost
   vars:
-    azure_resource_group: 'bpeck-tests'
+    random_number: "{{ 9999 | random() }}"
+    azure_resource_group: "vm-tests-{{ random_number }}"
   tasks:
      - block:
+       - name: Create networking stack
+         ansible.builtin.include_role:
+           name: cloud.azure_ops.azure_manage_networking_stack
+         vars:
+           operation: "create"
+           azure_region: "eastus"
+           azure_virtual_network: "vnet-{{ random_number }}"
+           azure_subnet: "subnet-{{ random_number }}"
+           azure_vnet_address_prefixes_cidr:
+            - "10.10.0.0/16"
+           azure_subnet_address_prefixes_cidr:
+            - "10.10.40.0/24"
        - name: Create a load balanced virtual machine with a default network interface
          ansible.builtin.include_role:
            name: cloud.azure_ops.azure_virtual_machine_with_public_ip
@@ -22,7 +28,7 @@
              image:
                offer: RHEL
                publisher: RedHat
-               sku: 7-LVM
+               sku: 8-LVM
                version: latest
              size: Standard_DS1_v2
              load_balancer_backend_address_pools:
@@ -45,3 +51,15 @@
              remove_on_absent: 'all_autocreated'
              azure_vm:
                name: "{{ azure_resource_group }}-example-vm"
+         - name: Delete networking stack
+           ansible.builtin.include_role:
+             name: cloud.azure_ops.azure_manage_networking_stack
+           vars:
+             operation: "delete"
+             azure_region: "eastus"
+             azure_virtual_network: "vnet-{{ random_number }}"
+             azure_subnet: "subnet-{{ random_number }}"
+             azure_vnet_address_prefixes_cidr:
+              - "10.10.0.0/16"
+             azure_subnet_address_prefixes_cidr:
+              - "10.10.40.0/24"
