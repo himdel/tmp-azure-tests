@@ -5,4 +5,4 @@ collections:
     version: dev
   - name: https://github.com/redhat-cop/cloud.azure_ops.git
     type: git
-    version: main
+    version: "5.0.0"
