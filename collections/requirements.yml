@@ -3,3 +3,4 @@ collections:
   - name: https://github.com/p3ck/ansible-collections_azure.git
     type: git
     version: dev
+  - cloud.azure_ops
